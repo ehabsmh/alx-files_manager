@@ -17,3 +17,5 @@ export default class UsersController {
     return res.status(201).json({ id: newUser.insertedId, email });
   }
 }
+
+module.exports = UsersController;
