@@ -2,11 +2,11 @@
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
 
-export const status = (req, res) => {
+export const getStatus = (req, res) => {
   res.json({ redis: redisClient.isAlive(), db: dbClient.isAlive() });
 };
 
-export const stats = async (req, res) => {
+export const getStats = async (req, res) => {
   const usersCount = await dbClient.nbUsers();
   const filesCount = await dbClient.nbFiles();
 
