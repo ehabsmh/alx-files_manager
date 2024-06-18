@@ -131,6 +131,32 @@ export default class FilesController {
     const idObject = new ObjectID(parentId);
     const files = await dbClient.client.db().collection('files').find({ parentId: idObject }).toArray();
 
+    if (!files) return res.status(200).json([]);
+
     return res.status(200).json(files);
+  }
+
+  static async putPublish(req, res) {
+    const user = await FilesController.getUser(req);
+    if (!user) return res.status(401).json({ error: 'Unauthorized' });
+
+    const fileId = req.params.id;
+    if (!fileId) return res.status(404).json({ error: 'Not found' });
+
+    const idObject = new ObjectID(fileId);
+    const file = await dbClient.client.db().collection('files').findOne({ _id: idObject });
+    if (!file) return res.status(404).json({ error: 'Not found' });
+
+    if (String(file.userId) !== String(user._id)) return res.status(403).json({ error: 'Forbidden' });
+
+    await dbClient.client.db().collection('files').updateOne({ _id: idObject }, { $set: { isPublic: true } });
+
+    return res.status(200).json({
+      id: file._id,
+      userId: file.userId,
+      name: file.name,
+      type: file.type,
+      isPublic: true,
+    });
   }
 }
