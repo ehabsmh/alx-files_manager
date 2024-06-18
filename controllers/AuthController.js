@@ -17,15 +17,15 @@ export default class AuthController {
     console.log(user);
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
     const token = uuidv4();
-    console.log(token);
     const key = `auth_${token}`;
+    console.log(key);
     const oneDay = 60 * 60 * 24;
-    redisClient.set(key, user._id.toString('utf-8'), oneDay);
+    redisClient.set(key, user._id.toString(), oneDay);
     return res.status(200).json({ token });
   }
 
   static async getDisconnect(req, res) {
-    const token = req.headers['X-Token'];
+    const token = req.header('X-Token');
     if (!token) return res.status(401).json({ error: 'Unauthorized' });
     await redisClient.del(`auth_${token}`);
     return res.status(204).end();
