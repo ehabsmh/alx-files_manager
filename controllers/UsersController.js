@@ -26,9 +26,8 @@ export default class UsersController {
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
     const objId = new ObjectID(userId);
     const user = await dbClient.client.db().collection('users')
-      .findOne({ _id: objId });
+      .findOne({ _id: objId }, { projection: { password: 0 } });
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
-    delete user.password;
     return res.status(200).json(user);
   }
 }
