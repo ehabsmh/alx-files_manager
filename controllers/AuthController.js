@@ -13,7 +13,7 @@ export default class AuthController {
     const [email, password] = decoded.split(':');
     const sha1Password = sha1(password);
     const user = await dbClient.client.db().collection('users')
-      .findOne({ email, sha1Password });
+      .findOne({ email, password: sha1Password });
     console.log(user);
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
     const token = uuidv4();

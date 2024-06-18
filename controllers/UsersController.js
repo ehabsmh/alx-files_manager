@@ -13,7 +13,7 @@ export default class UsersController {
     if (user) return res.status(400).json({ error: 'Already exist' });
     const sha1Password = sha1(password);
     const newUser = await dbClient.client.db().collection('users')
-      .insertOne({ email, sha1Password });
+      .insertOne({ email, password: sha1Password });
 
     return res.status(201).json({ id: newUser.insertedId, email });
   }
