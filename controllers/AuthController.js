@@ -14,11 +14,9 @@ export default class AuthController {
     const sha1Password = sha1(password);
     const user = await dbClient.client.db().collection('users')
       .findOne({ email, password: sha1Password });
-    console.log(user);
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
     const token = uuidv4();
     const key = `auth_${token}`;
-    console.log(key);
     const oneDay = 60 * 60 * 24;
     redisClient.set(key, user._id.toString(), oneDay);
     return res.status(200).json({ token });
