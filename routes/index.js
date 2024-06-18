@@ -3,10 +3,10 @@ import express from 'express';
 import UsersController from '../controllers/UsersController';
 import AppController from '../controllers/AppController';
 
-const indexRouter = express.Router();
+const router = express.Router();
 
-indexRouter.get('/status', AppController.getStatus);
-indexRouter.get('/stats', AppController.getStats);
-indexRouter.post('/users', UsersController.postNew);
+router.get('/status', AppController.getStatus);
+router.get('/stats', AppController.getStats);
+router.post('/users', UsersController.postNew);
 
-export default indexRouter;
+export default router;
